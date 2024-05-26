@@ -1,0 +1,20 @@
+{
+  "format_version": 2,
+  "tooth": "github.com/haojie06/LeviSafeZone",
+  "version": "1.0.0",
+  "info": {
+    "name": "SafeZone",
+    "description": "Create safe zones, prevent mob spawn",
+    "author": "haojie06",
+    "tags": []
+  },
+  "commands": {},
+  "files": {
+    "place": [
+      {
+        "src": "SafeZone/*",
+        "dest": "plugins/SafeZone/"
+      }
+    ]
+  }
+}

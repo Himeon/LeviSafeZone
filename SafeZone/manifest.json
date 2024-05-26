@@ -1,0 +1,13 @@
+{
+  "name": "SafeZone",
+  "entry": "index.js",
+  "type": "lse-quickjs",
+  "dependencies": [
+    {
+      "name": "legacy-script-engine-quickjs"
+    }
+  ],
+  "description": "Create Safe Zone",
+  "author": "haojie06",
+  "version": "1.0.0"
+}
