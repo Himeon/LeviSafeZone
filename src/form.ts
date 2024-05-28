@@ -74,7 +74,7 @@ function sendFormSubmitAddSafeZonePage(
   form.addLabel(`A点: ${playerState.stagedSafeZone.startPoint}`);
   form.addLabel(`B点: ${playerState.stagedSafeZone.endPoint}`);
   form.addInput("安全区域名", "安全区域名", "未命名");
-  form.addSwitch("忽略Z轴", true);
+  form.addSwitch("忽略Y轴", true);
   form.addSwitch("阻止生物生成", true);
   player.sendForm(form, (player, data) => {
     if (data === null) {
@@ -85,7 +85,7 @@ function sendFormSubmitAddSafeZonePage(
     }
     playerState.stagedSafeZone.dimensionId = player.pos.dimid;
     playerState.stagedSafeZone.name = data[3] as string;
-    playerState.stagedSafeZone.ignoreZ = data[4] as boolean;
+    playerState.stagedSafeZone.ignoreY = data[4] as boolean;
     playerState.stagedSafeZone.preventMobSpawn = data[5] as boolean;
     // 生成新的坐标, 保证startPoint < endPoint
     const startPoint = [
@@ -123,12 +123,12 @@ function sendFormSubmitAddSafeZonePage(
         dimensionId: playerState.stagedSafeZone.dimensionId,
         startPoint,
         endPoint,
-        ignoreZ: playerState.stagedSafeZone.ignoreZ,
+        ignoreY: playerState.stagedSafeZone.ignoreY,
         preventMobSpawn: playerState.stagedSafeZone.preventMobSpawn,
       } as SafeZone)
     ) {
       player.tell(
-        `安全区域 ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} 忽略Z轴: ${playerState.stagedSafeZone.ignoreZ} 阻止生物生成: ${playerState.stagedSafeZone.preventMobSpawn} 添加成功`
+        `安全区域 ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} 忽略Y轴: ${playerState.stagedSafeZone.ignoreY} 阻止生物生成: ${playerState.stagedSafeZone.preventMobSpawn} 添加成功`
       );
       player.tell("安全区域添加成功");
     } else {
@@ -158,7 +158,7 @@ function sendFormSafeZoneDetailPage(player: Player, zone: SafeZone) {
   const form = mc.newSimpleForm();
   form.setTitle("安全区域详情");
   form.setContent(
-    `${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\n忽略Z轴: ${zone.ignoreZ} 阻止生物生成: ${zone.preventMobSpawn}`
+    `${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\n忽略Y轴: ${zone.ignoreY} 阻止生物生成: ${zone.preventMobSpawn}`
   );
   form.addButton("删除");
   form.addButton("返回");

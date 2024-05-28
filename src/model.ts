@@ -1,7 +1,7 @@
 export interface StagedSafeZone {
   name: string;
   dimensionId: number;
-  ignoreZ: boolean;
+  ignoreY: boolean;
   startPoint: [number, number, number];
   endPoint: [number, number, number];
   preventMobSpawn: boolean;
@@ -11,7 +11,8 @@ export interface SafeZone {
   id: number;
   name: string;
   dimensionId: number; // 主世界\下界\末地
-  ignoreZ: boolean;
+  ignoreZ: boolean | undefined; // 第一个版本的错误, 应该是ignoreY
+  ignoreY: boolean;
   startPoint: [number, number, number];
   endPoint: [number, number, number];
   preventMobSpawn: boolean;
@@ -36,7 +37,15 @@ export class SafeZonesManager {
     this.safeZonesConfig = config;
     const zones = config.get("safeZones");
     if (zones) {
+      // 兼容ignoreZ, 迁移
+      (zones as SafeZone[]).forEach((zone) => {
+        if (zone.ignoreZ !== undefined) {
+          zone.ignoreY = zone.ignoreZ;
+          delete zone.ignoreZ;
+        }
+      });
       this.safeZones.push(...(zones as SafeZone[]));
+      this.safeZonesConfig.set("safeZones", this.safeZones);
     }
     logger.info(`加载安全区域数量: ${this.safeZones.length}`);
   }

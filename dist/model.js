@@ -15,7 +15,15 @@ class SafeZonesManager {
         this.safeZonesConfig = config;
         const zones = config.get("safeZones");
         if (zones) {
+            // 兼容ignoreZ, 迁移
+            zones.forEach((zone) => {
+                if (zone.ignoreZ !== undefined) {
+                    zone.ignoreY = zone.ignoreZ;
+                    delete zone.ignoreZ;
+                }
+            });
             this.safeZones.push(...zones);
+            this.safeZonesConfig.set("safeZones", this.safeZones);
         }
         logger.info(`加载安全区域数量: ${this.safeZones.length}`);
     }

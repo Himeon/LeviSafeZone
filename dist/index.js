@@ -25,10 +25,10 @@ mc.listen("onMobTrySpawn", (entity, pos) => {
         }
         if (pos.x >= safeZone.startPoint[0] &&
             pos.x <= safeZone.endPoint[0] &&
-            pos.y >= safeZone.startPoint[1] &&
-            pos.y <= safeZone.endPoint[1] &&
-            (safeZone.ignoreZ ||
-                (pos.z >= safeZone.startPoint[2] && pos.z <= safeZone.endPoint[2]))) {
+            pos.z >= safeZone.startPoint[2] &&
+            pos.z <= safeZone.endPoint[2] &&
+            (safeZone.ignoreY ||
+                (pos.y >= safeZone.startPoint[1] && pos.y <= safeZone.endPoint[1]))) {
             // mod生成在安全区域内
             if (safeZone.preventMobSpawn) {
                 return false;
@@ -52,7 +52,7 @@ safeZoneCommand.setCallback((cmd, origin, output, result) => {
             stagedSafeZone: {
                 name: "",
                 dimensionId: 0,
-                ignoreZ: true,
+                ignoreY: true,
                 startPoint: [0, 0, 0],
                 endPoint: [0, 0, 0],
                 preventMobSpawn: true,

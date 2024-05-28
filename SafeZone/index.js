@@ -25,7 +25,15 @@ var SafeZone = (function (exports) {
             this.safeZonesConfig = config;
             const zones = config.get("safeZones");
             if (zones) {
+                // 兼容ignoreZ, 迁移
+                zones.forEach((zone) => {
+                    if (zone.ignoreZ !== undefined) {
+                        zone.ignoreY = zone.ignoreZ;
+                        delete zone.ignoreZ;
+                    }
+                });
                 this.safeZones.push(...zones);
+                this.safeZonesConfig.set("safeZones", this.safeZones);
             }
             logger.info(`加载安全区域数量: ${this.safeZones.length}`);
         }
@@ -132,7 +140,7 @@ var SafeZone = (function (exports) {
         form.addLabel(`A点: ${playerState.stagedSafeZone.startPoint}`);
         form.addLabel(`B点: ${playerState.stagedSafeZone.endPoint}`);
         form.addInput("安全区域名", "安全区域名", "未命名");
-        form.addSwitch("忽略Z轴", true);
+        form.addSwitch("忽略Y轴", true);
         form.addSwitch("阻止生物生成", true);
         player.sendForm(form, (player, data) => {
             if (data === null) {
@@ -144,7 +152,7 @@ var SafeZone = (function (exports) {
             }
             playerState.stagedSafeZone.dimensionId = player.pos.dimid;
             playerState.stagedSafeZone.name = data[3];
-            playerState.stagedSafeZone.ignoreZ = data[4];
+            playerState.stagedSafeZone.ignoreY = data[4];
             playerState.stagedSafeZone.preventMobSpawn = data[5];
             // 生成新的坐标, 保证startPoint < endPoint
             const startPoint = [
@@ -163,10 +171,10 @@ var SafeZone = (function (exports) {
                 dimensionId: playerState.stagedSafeZone.dimensionId,
                 startPoint,
                 endPoint,
-                ignoreZ: playerState.stagedSafeZone.ignoreZ,
+                ignoreY: playerState.stagedSafeZone.ignoreY,
                 preventMobSpawn: playerState.stagedSafeZone.preventMobSpawn,
             })) {
-                player.tell(`安全区域 ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} 忽略Z轴: ${playerState.stagedSafeZone.ignoreZ} 阻止生物生成: ${playerState.stagedSafeZone.preventMobSpawn} 添加成功`);
+                player.tell(`安全区域 ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} 忽略Y轴: ${playerState.stagedSafeZone.ignoreY} 阻止生物生成: ${playerState.stagedSafeZone.preventMobSpawn} 添加成功`);
                 player.tell("安全区域添加成功");
             }
             else {
@@ -191,7 +199,7 @@ var SafeZone = (function (exports) {
     function sendFormSafeZoneDetailPage(player, zone) {
         const form = mc.newSimpleForm();
         form.setTitle("安全区域详情");
-        form.setContent(`${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\n忽略Z轴: ${zone.ignoreZ} 阻止生物生成: ${zone.preventMobSpawn}`);
+        form.setContent(`${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\n忽略Y轴: ${zone.ignoreY} 阻止生物生成: ${zone.preventMobSpawn}`);
         form.addButton("删除");
         form.addButton("返回");
         player.sendForm(form, (player, buttonId) => {
@@ -240,10 +248,10 @@ var SafeZone = (function (exports) {
             }
             if (pos.x >= safeZone.startPoint[0] &&
                 pos.x <= safeZone.endPoint[0] &&
-                pos.y >= safeZone.startPoint[1] &&
-                pos.y <= safeZone.endPoint[1] &&
-                (safeZone.ignoreZ ||
-                    (pos.z >= safeZone.startPoint[2] && pos.z <= safeZone.endPoint[2]))) {
+                pos.z >= safeZone.startPoint[2] &&
+                pos.z <= safeZone.endPoint[2] &&
+                (safeZone.ignoreY ||
+                    (pos.y >= safeZone.startPoint[1] && pos.y <= safeZone.endPoint[1]))) {
                 // mod生成在安全区域内
                 if (safeZone.preventMobSpawn) {
                     return false;
@@ -267,7 +275,7 @@ var SafeZone = (function (exports) {
                 stagedSafeZone: {
                     name: "",
                     dimensionId: 0,
-                    ignoreZ: true,
+                    ignoreY: true,
                     startPoint: [0, 0, 0],
                     endPoint: [0, 0, 0],
                     preventMobSpawn: true,
