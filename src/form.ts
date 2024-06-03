@@ -8,7 +8,7 @@ export function sendFormMainPage(player: Player, playerState: PlayerState) {
   form.addButton("添加安全区域");
   form.addButton("列出安全区域");
   player.sendForm(form, (player, buttonId) => {
-    if (buttonId === null) {
+    if (buttonId == null) {
       return;
     }
     switch (buttonId) {
@@ -34,7 +34,7 @@ export function sendFormAddSafeZonePage(
   form.addButton("创建安全区");
   form.addButton("返回");
   player.sendForm(form, (player, buttonId) => {
-    if (buttonId === null) {
+    if (buttonId == null) {
       return;
     }
     switch (buttonId) {
@@ -147,7 +147,7 @@ function sendFormListSafeZonePage(player: Player) {
     );
   });
   player.sendForm(form, (player, buttonId) => {
-    if (buttonId === null) {
+    if (buttonId == null) {
       return;
     }
     sendFormSafeZoneDetailPage(player, safeZonesManager.safeZones[buttonId]);
@@ -163,7 +163,7 @@ function sendFormSafeZoneDetailPage(player: Player, zone: SafeZone) {
   form.addButton("删除");
   form.addButton("返回");
   player.sendForm(form, (player, buttonId) => {
-    if (buttonId === null) {
+    if (buttonId == null) {
       return;
     }
     switch (buttonId) {

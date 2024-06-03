@@ -80,7 +80,7 @@ var SafeZone = (function (exports) {
         form.addButton("添加安全区域");
         form.addButton("列出安全区域");
         player.sendForm(form, (player, buttonId) => {
-            if (buttonId === null) {
+            if (buttonId == null) {
                 return;
             }
             switch (buttonId) {
@@ -103,7 +103,7 @@ var SafeZone = (function (exports) {
         form.addButton("创建安全区");
         form.addButton("返回");
         player.sendForm(form, (player, buttonId) => {
-            if (buttonId === null) {
+            if (buttonId == null) {
                 return;
             }
             switch (buttonId) {
@@ -190,7 +190,7 @@ var SafeZone = (function (exports) {
             form.addButton(`${zone.name}[dimId: ${zone.dimensionId}]\n${zone.startPoint} -> ${zone.endPoint}`);
         });
         player.sendForm(form, (player, buttonId) => {
-            if (buttonId === null) {
+            if (buttonId == null) {
                 return;
             }
             sendFormSafeZoneDetailPage(player, global_1$1.safeZonesManager.safeZones[buttonId]);
@@ -203,7 +203,7 @@ var SafeZone = (function (exports) {
         form.addButton("删除");
         form.addButton("返回");
         player.sendForm(form, (player, buttonId) => {
-            if (buttonId === null) {
+            if (buttonId == null) {
                 return;
             }
             switch (buttonId) {
