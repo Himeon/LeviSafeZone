@@ -25,7 +25,7 @@ class SafeZonesManager {
             this.safeZones.push(...zones);
             this.safeZonesConfig.set("safeZones", this.safeZones);
         }
-        logger.info(`加载安全区域数量: ${this.safeZones.length}`);
+        logger.info(`Load the number of safe areas: ${this.safeZones.length}`);
     }
     addSafeZone(zone) {
         if (this.safeZonesConfig) {
