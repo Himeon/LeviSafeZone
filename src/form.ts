@@ -3,10 +3,10 @@ import { PlayerState, SafeZone } from "./model";
 
 export function sendFormMainPage(player: Player, playerState: PlayerState) {
   const form = mc.newSimpleForm();
-  form.setTitle("安全区域管理");
-  form.setContent(`当前安全区域数量: ${safeZonesManager.safeZones.length}`);
-  form.addButton("添加安全区域");
-  form.addButton("列出安全区域");
+  form.setTitle("S.A.M.");
+  form.setContent(`Number of SA: ${safeZonesManager.safeZones.length}`);
+  form.addButton("Add Safe Zone");
+  form.addButton("SA List");
   player.sendForm(form, (player, buttonId) => {
     if (buttonId == null) {
       return;
@@ -27,12 +27,12 @@ export function sendFormAddSafeZonePage(
   playerState: PlayerState
 ) {
   const form = mc.newSimpleForm();
-  form.setTitle("添加安全区域");
-  form.setContent("请选择安全区域的A点和B点, 两点之间的区域将被设置为安全区域");
-  form.addButton("设置A点");
-  form.addButton("设置B点");
-  form.addButton("创建安全区");
-  form.addButton("返回");
+  form.setTitle("Add SA");
+  form.setContent("Please select point A and point B of the safe area, the area between the two points will be set as the safe area");
+  form.addButton("Set point A");
+  form.addButton("Set point B");
+  form.addButton("Create a safe zone");
+  form.addButton("return");
   player.sendForm(form, (player, buttonId) => {
     if (buttonId == null) {
       return;
@@ -44,7 +44,7 @@ export function sendFormAddSafeZonePage(
           Math.floor(player.pos.y),
           Math.floor(player.pos.z),
         ];
-        player.tell(`A点设置为: ${playerState.stagedSafeZone.startPoint}`);
+        player.tell(`Point A is set to: ${playerState.stagedSafeZone.startPoint}`);
         break;
       case 1:
         playerState.stagedSafeZone.endPoint = [
@@ -52,7 +52,7 @@ export function sendFormAddSafeZonePage(
           Math.floor(player.pos.y),
           Math.floor(player.pos.z),
         ];
-        player.tell(`B点设置为: ${playerState.stagedSafeZone.endPoint}`);
+        player.tell(`Point B is set to: ${playerState.stagedSafeZone.endPoint}`);
         break;
       case 2:
         sendFormSubmitAddSafeZonePage(player, playerState);
@@ -69,13 +69,13 @@ function sendFormSubmitAddSafeZonePage(
   playerState: PlayerState
 ) {
   const form = mc.newCustomForm();
-  form.setTitle("添加安全区域");
-  form.addLabel(`世界: ${player.pos.dim} Id: ${player.pos.dimid}`);
-  form.addLabel(`A点: ${playerState.stagedSafeZone.startPoint}`);
-  form.addLabel(`B点: ${playerState.stagedSafeZone.endPoint}`);
-  form.addInput("安全区域名", "安全区域名", "未命名");
-  form.addSwitch("忽略Y轴", true);
-  form.addSwitch("阻止生物生成", true);
+  form.setTitle("Add safe zone");
+  form.addLabel(`world: ${player.pos.dim} Id: ${player.pos.dimid}`);
+  form.addLabel(`Point A: ${playerState.stagedSafeZone.startPoint}`);
+  form.addLabel(`Point B: ${playerState.stagedSafeZone.endPoint}`);
+  form.addInput("safe area name", "safe area name", "unnamed");
+  form.addSwitch("Ignore Y axis", true);
+  form.addSwitch("Prevent mobs from spawning", true);
   player.sendForm(form, (player, data) => {
     if (data === null) {
       return;
@@ -128,19 +128,19 @@ function sendFormSubmitAddSafeZonePage(
       } as SafeZone)
     ) {
       player.tell(
-        `安全区域 ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} 忽略Y轴: ${playerState.stagedSafeZone.ignoreY} 阻止生物生成: ${playerState.stagedSafeZone.preventMobSpawn} 添加成功`
+        `safe area ${playerState.stagedSafeZone.name}: ${startPoint} -> ${endPoint} Ignore Y axis: ${playerState.stagedSafeZone.ignoreY} Prevent mobs from spawning: ${playerState.stagedSafeZone.preventMobSpawn} Added successfully`
       );
-      player.tell("安全区域添加成功");
+      player.tell("Security area added successfully");
     } else {
-      player.tell("安全区域添加失败");
+      player.tell("Security zone addition failed");
     }
   });
 }
 
 function sendFormListSafeZonePage(player: Player) {
   const form = mc.newSimpleForm();
-  form.setTitle("安全区域列表");
-  form.setContent(`当前安全区域数量: ${safeZonesManager.safeZones.length}`);
+  form.setTitle("Safe zone list");
+  form.setContent(`Current number of safe areas: ${safeZonesManager.safeZones.length}`);
   safeZonesManager.safeZones.forEach((zone) => {
     form.addButton(
       `${zone.name}[dimId: ${zone.dimensionId}]\n${zone.startPoint} -> ${zone.endPoint}`
@@ -156,12 +156,12 @@ function sendFormListSafeZonePage(player: Player) {
 
 function sendFormSafeZoneDetailPage(player: Player, zone: SafeZone) {
   const form = mc.newSimpleForm();
-  form.setTitle("安全区域详情");
+  form.setTitle("Security area details");
   form.setContent(
-    `${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\n忽略Y轴: ${zone.ignoreY} 阻止生物生成: ${zone.preventMobSpawn}`
+    `${zone.name}[dimId: ${zone.dimensionId}] ${zone.startPoint} -> ${zone.endPoint}\nIgnore Y axis: ${zone.ignoreY} Prevent mobs from spawning: ${zone.preventMobSpawn}`
   );
-  form.addButton("删除");
-  form.addButton("返回");
+  form.addButton("delete");
+  form.addButton("return");
   player.sendForm(form, (player, buttonId) => {
     if (buttonId == null) {
       return;
@@ -169,9 +169,9 @@ function sendFormSafeZoneDetailPage(player: Player, zone: SafeZone) {
     switch (buttonId) {
       case 0:
         if (safeZonesManager.removeSafeZone(zone.id)) {
-          player.tell(`安全区域 ${zone.name} 删除成功`);
+          player.tell(`safe area ${zone.name} successfully deleted`);
         } else {
-          player.tell(`安全区域 ${zone.name} 删除失败`);
+          player.tell(`safe area ${zone.name} failed to delete`);
         }
         break;
       case 1:
