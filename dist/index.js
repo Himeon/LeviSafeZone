@@ -37,7 +37,7 @@ mc.listen("onMobTrySpawn", (entity, pos) => {
     }
     return true;
 });
-const safeZoneCommand = mc.newCommand("safezone", "创建安全区域", PermType.GameMasters, 0x80, "安全区");
+const safeZoneCommand = mc.newCommand("safezone", "Create a safe zone", PermType.GameMasters, 0x80, "Safe place");
 const playerStateMap = new Map();
 safeZoneCommand.overload([]);
 safeZoneCommand.setCallback((cmd, origin, output, result) => {
