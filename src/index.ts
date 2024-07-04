@@ -47,10 +47,10 @@ mc.listen("onMobTrySpawn", (entity: string, pos: FloatPos) => {
 
 const safeZoneCommand = mc.newCommand(
   "safezone",
-  "创建安全区域",
+  "Create a safe zone",
   PermType.GameMasters,
   0x80,
-  "安全区"
+  "Safe place"
 );
 
 const playerStateMap = new Map<string, PlayerState>();
